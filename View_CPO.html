@@ -31,9 +31,8 @@
             </ul>
             <form class="form-inline my-2 my-lg-0 mr-4">
                 <a href="quizlist.html" data-toggle="modal" data-target="#modalLoginForm">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" data-toggle="modal"
-                        data-target="#modalLoginForm">
-                        Sign In
+                    <button onclick="logout()" class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                        log out
                     </button>
                 </a>
             </form>
@@ -61,7 +60,7 @@
                             <div class="col">
                                 <div class="d-flex flex-row bd-highlight p-t-8">
                                     <label for="answer" style="width:250px;">PO Start Date</label>
-                                    <input style="margin-bottom: 10px;" type="text" class="form-control" id="po_end_date" readonly>
+                                    <input style="margin-bottom: 10px;" type="text" class="form-control" id="po_start_date" readonly>
                                 </div>
                                 <div id="leftcol">
                                     <!-- ADA DI JS DI CPO.JS -->
@@ -70,7 +69,7 @@
                             <div class="col">
                                 <div class="d-flex flex-row bd-highlight p-t-8">
                                     <label for="answer" style="width:250px;">PO Complition Date</label>
-                                    <input style="margin-bottom: 10px;" type="text" class="form-control" id="po_start_date" readonly>
+                                    <input style="margin-bottom: 10px;" type="text" class="form-control" id="po_complete_date" readonly>
                                 </div>
                                 <div id="rightcol">
                                     <!-- ADA DI JS DI CPO.JS -->
@@ -130,7 +129,7 @@
                     <nav class="navbar navbar-inverse" style="background-color:#111; border-radius: 3px; height: 53px;">
                         <div class="container-fluid">
                             <div class="navbar-header">
-                                <p class="navbar-brand" href="#" style="color:white;">HEADER INFORRMATION</p>
+                                <p class="navbar-brand" href="#" style="color:white;">ITEM</p>
                             </div>
                         </div>
                     </nav>
@@ -155,7 +154,7 @@
                                 <div class="d-flex flex-row bd-highlight p-t-8">
                                     <label for="answer" style="width:190px;">Storage Location</label>
                                     <select style="margin-bottom: 10px; border-radius: 3px; width: 20%;">
-                                        <option value="Material">--slelect--</option>
+                                        <option value="Material">--select--</option>
                                     </select>
                                 </div>
                                 <div class="d-flex flex-row bd-highlight p-t-8">
@@ -163,7 +162,7 @@
                                     <input style="margin-bottom: 10px;" type="number" class="form-control" id="quantity" readonly>
                                 </div>
                                 <div class="d-flex flex-row bd-highlight p-t-8">
-                                    <label for="answer" style="width:250px;">Price</label>
+                                    <label for="answer" style="width:250px;">Unit Price</label>
                                     <input style="margin-bottom: 10px;" type="number" class="form-control" id="price_each" readonly>
                                 </div>
                                 <div class="d-flex flex-row bd-highlight p-t-8">
@@ -181,11 +180,16 @@
                     </div>
             </div>
             <!-- ITEM -->
-    
-    
-    
-    
-            
+            <!-- APPROCE -->
+            <div class="sub">
+            <div class="container-login100-form-btn" style="margin-bottom:30px;">
+                <p class="login100-form-btn" onclick="submitRecord()">
+                    Submit
+                </p>
+            </div>
+            </div>
+            <!-- APPROCE -->
+
             </form>
         </div>
     </div>

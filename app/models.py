@@ -12,12 +12,15 @@ class Employee(db.Model):
     email = db.Column(db.String())
     fullname = db.Column(db.String())
     position = db.Column(db.String())
+    token = db.Column(db.String())
 
-    def __init__(self, password, email, fullname, position):
+    def __init__(self, password, email, fullname, position, token):
         self.password = password
         self. email = email
         self. fullname = fullname
         self. position = position
+        self. token = token
+
 
     def __repr__(self):
         return '<employee id {}>'.format(self.employee_id)
@@ -29,6 +32,7 @@ class Employee(db.Model):
             'password': self.password,
             'email': self.email,
             'position': self.position,
+            'token': self.token
         }
 # EMPLOYEE =========================================================
 # CONTRACT =========================================================
@@ -78,9 +82,11 @@ class PurchaseOrder(db.Model):
     quantity = db.Column(db.Integer)
     price_each = db.Column(db.Integer)
     note1 = db.Column(db.String())
+    record_id = db.Column(db.String())
+    process_id = db.Column(db.String())
     # item_list = db.relationship('Contract', cascade='all,delete', backref='purchase_order', lazy=True)
     
-    def __init__(self, contract_id, po_start_date, po_complete_date, medco_representative, medco_to_provide, location, note, budget_source, material, description, quantity, price_each, note1):
+    def __init__(self, contract_id, po_start_date, po_complete_date, medco_representative, medco_to_provide, location, note, budget_source, material, description, quantity, price_each, note1, record_id, process_id):
         
         self.contract_id = contract_id
         self.po_start_date = po_start_date
@@ -97,6 +103,8 @@ class PurchaseOrder(db.Model):
         self.quantity = quantity
         self.price_each = price_each
         self.note1 = note1
+        self.record_id = record_id
+        self.process_id = process_id
 
     def __repr__(self):
         return '<po id {}>'.format(self.po_id)
@@ -117,7 +125,10 @@ class PurchaseOrder(db.Model):
             'description': self.description,
             'quantity': self.quantity,
             'price_each': self.price_each,
-            'note1': self.note1
+            'note1': self.note1,
+            'record_id': self.record_id,
+            'process_id': self.process_id
+
 
         }
 # ITEM =========================================================

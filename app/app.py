@@ -5,8 +5,12 @@ from models import Contract, Employee, PurchaseOrder, Comment
 from random import randint
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+import requests
 
+urlnextflow = "https://mosaic.nextflow.navcore.com/nextapi/api/records"
+urlnextflowSUBMIT = "https://mosaic.nextflow.navcore.com/nextapi/api/records/"
 
+BPNMiwiw = "definitions:bpmn:0cc3cfd8-c9d0-4035-b924-ed060ea58822"
 
 app = Flask(__name__)
 CORS(app)
@@ -25,6 +29,59 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%
 
 db.init_app(app)
 
+# record nextflow ======================================
+def createRecordNF(tokenNFRequester):
+    # create record ke nextflow dl
+    dataCreateRecordNF = {
+        "data": {
+            "definition": {
+                "id": BPNMiwiw
+            }
+        }
+    }
+    urlCreateRecordNF = urlnextflow
+    # userTokenNF = os.getenv("NF_user_token")
+    userTokenNF = tokenNFRequester
+
+    recordNF = requests.post(urlCreateRecordNF, data=json.dumps(dataCreateRecordNF), headers={
+                             "Content-Type": "application/json", "Authorization": "Bearer %s" % userTokenNF})
+
+    return json.loads(recordNF.text)
+
+
+
+#     ================================================ BIKIN RECORN SUBMIT RECORD
+
+#  SUBMIT ==============================================================
+def submitRecordNF(recordIdNF, body, tokenNFRequester):   
+    pegawaiRequester = db.session.query(Employee).filter_by(employee_id=body["data_pegawai_requester"]["employee_id"]).first()
+    pegawaiscmr = db.session.query(Employee).filter_by(employee_id=body["data_pegawai_requester"]["pegawaiscmr"]).first()
+
+    print(recordIdNF, body, tokenNFRequester)
+#     print(body['comment'])
+
+    dataSubmitRecordNF= {
+        "data": {
+            "form_data": {
+                "requester": "runa6",
+                "email_request": pegawaiRequester.email,
+                "email_scmr": pegawaiscmr.email
+            },
+            "comment": "ya gimana"
+        }
+        }
+
+    print(dataSubmitRecordNF)
+    urlSubmitRecordNF = urlnextflowSUBMIT
+    # userTokenNF = os.getenv("NF_user_token")
+    userTokenNF = tokenNFRequester
+    print(userTokenNF)
+
+    submitNF = requests.post(urlSubmitRecordNF+recordIdNF+'/submit', data = json.dumps(dataSubmitRecordNF), headers = {"Content-Type": "application/json", "Authorization": "Bearer %s" %userTokenNF})
+    print("SUBMITNF",submitNF)
+
+    return json.loads(submitNF.text)
+#     SUBMIT ========================================================================================
 # ADD EMPLOYEE ============
 @app.route('/addEmployee', methods=["POST"])
 def add_employee():
@@ -41,7 +98,8 @@ def add_employee():
             password=password,
             email=email,
             fullname=fullname,
-            position=position
+            position=position,
+            token=None,
         )
 
         db.session.add(employee)
@@ -229,7 +287,9 @@ def addPurchaseOrder(contract_id):
             description=description,
             quantity=quantity,
             price_each=price_each,
-            note1=note1
+            note1=note1,
+            process_id=body["process_id"],
+            record_id=body["record_id"]
         )
 
         db.session.add(purchase_order)
@@ -239,6 +299,49 @@ def addPurchaseOrder(contract_id):
     except Exception as e:
         return(str(e)), 400
 # ADD PURCHASE ORDER ==================
+# ADD PURCHASE ORDER ==================
+@app.route('/addPurchaseOrderSubmit/<contract_id>', methods=["POST"])
+def addPurchaseOrderSubmit(contract_id):
+    
+    body = request.json
+    po_start_date = body['po_start_date']
+    po_complete_date = None
+    medco_representative = body['medco_representative']
+    medco_to_provide = body['medco_to_provide']
+    location = body['location']
+    note = body['note']
+    budget_source = body['budget_source']
+
+    material = body['material']
+    description = body['description']
+    quantity = body['quantity']
+    price_each = body['price_each']
+    note1 = body['note1']
+
+    pegawaiRequester = db.session.query(Employee).filter_by(employee_id=body["data_pegawai_requester"]["employee_id"]).first()
+    tokenNFRequester = pegawaiRequester.token
+
+    recordNF = createRecordNF(tokenNFRequester)
+    recordIdNF = recordNF['data']['id']
+
+    body["record_id"] = recordIdNF
+
+    submittedRecord = submitRecordNF(recordIdNF, body, tokenNFRequester)
+    print("LOL",submittedRecord)
+    processIdNF = submittedRecord['data']['process_id']
+
+    body["process_id"] = processIdNF
+
+
+    try:       
+        PurchaseOrder.query.filter_by(po_id=body["po_id"]).update(dict(process_id=body["process_id"],record_id=body["record_id"]))
+        db.session.commit()
+        return "submit purchase order. purchase order id={}".format(body["po_id"]), 200
+
+    except Exception as e:
+        return(str(e)), 400
+# ADD PURCHASE ORDER ==================
+
 # GET PURCHASE ORDER ===========
 @app.route('/getAllPurchaseOrder', methods=["GET"])
 def get_all_purchase_order():

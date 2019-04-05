@@ -37,7 +37,7 @@ function login() {
             else if (position == 'manager')
                 window.location.href = '../contract_list_manager.html';
             else if (position == 'scm reviewer')    
-                window.location.href = '../contract_list.html';
+                window.location.href = '../contract_list_reviewer.html';
             else if (position == 'contract owner')
                 window.location.href = '../contract_list.html';
         },
