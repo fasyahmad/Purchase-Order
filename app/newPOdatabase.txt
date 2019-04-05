@@ -1,0 +1,95 @@
+============== SQL DATABASE ================
+create table employee (
+  employee_id serial primary key,
+  password varchar(200),
+  email varchar(200),
+  fullname varchar(200),
+  position varchar(200)
+);
+
+create table contract (
+  contract_id serial primary key,
+  id_ integer,
+  vendor_name varchar(200),
+  contract_start_date timestamp,
+  contract_end_date timestamp,
+  foreign key (id_) references employee(employee_id)
+);
+
+
+create table purchase_order (
+  po_id serial primary key,
+  contract_id integer,
+  po_start_date timestamp,
+  po_complete_date timestamp,
+  medco_representative varchar(200),
+  medco_to_provide varchar(200),
+  location varchar(200),
+  note varchar(500),
+  budget_source varchar(200),
+  material varchar(200),
+  description varchar(500),
+  quantity integer,
+  price_each integer,
+  note1 varchar(500),
+  foreign key (contract_id) references contract(contract_id)
+);
+
+create table comment (
+  id_ serial primary key,
+  comment_id integer,
+  comment_detail varchar(500),
+  vendor_name varchar(200),
+  foreign key (comment_id) references purchase_order(po_id)
+);
+============== SQL DATABASE ================
+
+=============== IO DATABASE ================
+Table "employee" {
+  "employee_id_PK" integer
+  "password" varchar
+  "email" varchar
+  "fullname" varchar
+  "position" varchar
+}
+
+Table "contract" {
+  "contract_id_PK" integer
+  "id_FK" integer
+  "vendor_name" varchar
+  "contract_start_date" varchar
+  "contract_end_date" varchar
+}
+
+
+Table "purchase_order" {
+  "po_id_PK" integer
+  "contract_id_FK" integer
+  "po_start_date" varchar
+  "po_complete_date" varchar
+  "medco_representative" varchar
+  "medco_to_provide" varchar
+  "location" varchar
+  "note" varchar
+  "budget_source" varchar
+  "material" varchar
+  "description" varchar
+  "quantity" integer
+  "price_each" float
+  "note1" varchar
+
+}
+
+Table "comment" {
+  "id_PK" integer
+  "comment_id" integer
+  "comment_detail" varchar
+}
+
+Ref:"employee"."employee_id_PK" < "contract"."id_FK"
+
+
+Ref:"contract"."contract_id_PK" < "purchase_order"."contract_id_FK"
+
+Ref:"comment"."comment_id" < "purchase_order"."po_id_PK"
+=============== IO DATABASE ================
