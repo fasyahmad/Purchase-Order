@@ -146,6 +146,12 @@ $.ajax({
         $('#quantity').val(profil.quantity)
         $('#price_each').val(profil.price_each)
         $('#note1').val(profil.note1)
+
+        var totalprice = profil.quantity * profil.price_each
+        console.log(profil.quantity)
+        console.log(profil.price_each)
+        console.log(totalprice)
+        $('#totalPrice').val(totalprice)
     },
     error: function (error) {
         //error handling

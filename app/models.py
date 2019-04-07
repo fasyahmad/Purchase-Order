@@ -13,6 +13,7 @@ class Employee(db.Model):
     fullname = db.Column(db.String())
     position = db.Column(db.String())
     token = db.Column(db.String())
+    contract_status = db.relationship('Contract', cascade='all,delete', backref='employee', lazy=True)
 
     def __init__(self, password, email, fullname, position, token):
         self.password = password
@@ -32,15 +33,16 @@ class Employee(db.Model):
             'password': self.password,
             'email': self.email,
             'position': self.position,
-            'token': self.token
-        }
+            'token': self.token,
+            'contract_status': [{'id_': item.id_, 'vendor_name': item.vendor_name, 'contract_start_date': item.contract_start_date, 'contract_end_date': item.contract_end_date} for item in self.contract_status]
+       }
 # EMPLOYEE =========================================================
 # CONTRACT =========================================================
 class Contract(db.Model):
     __tablename__ = 'contract'
 
     contract_id = db.Column(db.Integer, primary_key=True)
-    id_ = db.Column(db.Integer())
+    id_ = db.Column(db.Integer, db.ForeignKey('employee.employee_id'), nullable=False)
     vendor_name = db.Column(db.String())
     contract_start_date = db.Column(db.DateTime)
     contract_end_date = db.Column(db.DateTime)

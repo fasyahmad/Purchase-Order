@@ -177,6 +177,11 @@
                                     <label for="answer" style="width:250px;">Note</label>
                                     <textarea style="margin-bottom: 50px; height:200px;" class="form-control" id="note1" readonly></textarea>
                                 </div>
+                                <div class="totalprice d-flex justify-content-end">
+                                    <label for="answer" style="width:150px; ">Total Amount(IDR)</label>
+                                    <input style="margin-bottom: 10px; width: 200px; height: 50px; font-size: 30px;" type="number" class="form-control"
+                                        id="totalPrice" readonly>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -201,13 +206,14 @@
             <div class="container">
                 <div class="row">
                     <div class="col-2" style="text-align: center;">
-                        <img src="img/pp.png" alt="" style="border-radius:50%; width: 120px;">
-                        <p>fasyahmad</p>
-                        <p>manager</p>
+                        <img src="img/pp.png" alt="" style="border-radius:50%; width: 120px;" >
+                        <div class="prof" id="profileInfo">
+
+                        </div>
                     </div>
                     <div class="col-sm d-flex align-items-end flex-column">
-                            <textarea style="margin-bottom: 5px; height:100px;" class="form-control" id="comment"></textarea>
-                            <button type="button" class="btn btn-dark">POST</button>
+                            <textarea style="margin-bottom: 5px; height:100px;" class="form-control" id="comment_detail"></textarea>
+                            <button type="button" class="btn btn-dark" onclick="addComment()">POST</button>
                     </div>
                 </div>
             </div>
@@ -231,7 +237,7 @@
     <script src="http://code.jquery.com/jquery-2.2.4.min.js"
         integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <script src="js/login.js"></script>
-    <script src="js/View_CPO.js"></script>
+    <script src="js/View_CPO_reviewer.js"></script>
 
 </body>
 

@@ -19,7 +19,6 @@ function logout() {
 
 }
 
-console.log('employee id')
 // function getProfil(){
 var getAllContract = "http://127.0.0.1:5000/getAllContract" 
 var getProfile = "http://127.0.0.1:5000/getEmployeeBy/" + getCookie("employee_id")
@@ -50,7 +49,7 @@ $.ajax({
     }
 }) 
 // GET PROFILE
-$.ajax({
+$.ajax({    
     url: getAllContract,
     method: "GET",
     success: function (contract) {

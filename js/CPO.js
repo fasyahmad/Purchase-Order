@@ -127,7 +127,6 @@ function addcoy() {
 }
 // ============================================
 
-
 // ADD PURCHASE ORDER ============================================================
 function createPurchaseOrder(contract_id) {
     // var quiz_id = document.getElementById("quiz").value;
@@ -175,7 +174,9 @@ function createPurchaseOrder(contract_id) {
             description: description,
             quantity: quantity,
             price_each: price_each,
-            note1: note1
+            note1: note1,
+            record_id : "",
+            process_id : ""
         }),
         success: function () {
             alert("anda berhasil menambahkan Purchase Order");

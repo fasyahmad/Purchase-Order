@@ -8,13 +8,44 @@ function getCookie(name) {
     }
     return null;
 }
+function eraseCookie() {
+    document.cookie = 'employee id=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+    document.cookie = 'position=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+}
 
+function logout() {
+    window.location.href = 'cover.html'
+    eraseCookie()
+
+}
+// function getProfil(){
+var getAllContract = "http://127.0.0.1:5000/getAllContract"
+var getProfile = "http://127.0.0.1:5000/getEmployeeBy/" + getCookie("employee_id")
+$.ajax({
+    url: getProfile,
+    method: "GET",
+    success: function (profil) {
+        profile =
+        `
+            <p>${profil.fullname}</p>
+            <p>${profil.position}</p>
+        `
+        $('#profileInfo').append(profile)
+    },
+    error: function (error) {
+        //error handling
+    },
+    complete: function () {
+
+    }
+})
+
+// ============================================
 
 //Contract Purchase Order ========================================
 var url_string = window.location.href
 var url = new URL(url_string);
 var contract_id = Number(url.searchParams.get("contract_id"));
-console.log(contract_id)
 
 // GET CONTRACT INFO
 $.ajax({
@@ -88,9 +119,6 @@ $.ajax({
     }
 })
 // GET CONTRACT INFO
-
-
-var getProfile = "http://127.0.0.1:5000/getEmployeeBy/" + getCookie("employee_id")
 $.ajax({
     url: getProfile,
     method: "GET",
@@ -111,7 +139,7 @@ $.ajax({
     }
 }) 
 
-// ============================================
+
 
 
 // VIEW PURCHASE ORDER ======================================
@@ -120,6 +148,7 @@ $.ajax({
     method: "GET",
     
     success: function (profil) {
+        $('#po_id').val(profil.po_id)
         $('#po_start_date').val(profil.po_start_date)
         $('#po_end_date').val(profil.po_complete_date)
         $('#medco_representative').val(profil.medco_representative)
@@ -133,6 +162,12 @@ $.ajax({
         $('#quantity').val(profil.quantity)
         $('#price_each').val(profil.price_each)
         $('#note1').val(profil.note1)
+
+        
+        var totalprice = profil.quantity * profil.price_each
+        $('#totalPrice').val(totalprice)
+        var po_id = profil.po_id
+        console.log(po_id)
     },
     error: function (error) {
         //error handling
@@ -146,4 +181,35 @@ $.ajax({
 
 
 // ADD COMMENT ==============================================
+function addComment(po_id) {
+    // var quiz_id = document.getElementById("quiz").value;
+    var po_id = po_id
+    console.log(po_id)
+    var comment_detail = $('#comment_detail').val()
+
+    console.log(po_id);
+    console.log(comment_detail);
+
+    $.ajax({
+        url: `http://127.0.0.1:5000/addComment`,
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            po_id: po_id,
+            comment_detail: comment_detail,
+        }),
+        success: function () {
+            
+        },
+        error: function () {
+            alert("cek semua inputanya");
+        },
+        complete: function () {
+            console.log("mantul");
+        }
+    });
+} 
+
+// ADD COMMENT ==============================================
+
 
