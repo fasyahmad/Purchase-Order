@@ -41,6 +41,57 @@ $.ajax({
 })
 
 // ============================================
+// GET PROFILE
+$.ajax({
+    url: getAllContract,
+    method: "GET",
+    success: function (contract) {
+        for (var i = 0; i < contract.length; i++) {
+            var card =
+                `
+                    <div class="card bg-light mb-3">
+                    <div class="card-body d-flex justify-content-around" style="padding: 1rem;">
+                        <div class="sat" style="text-align:center;">
+                            <p>Contract ID</p>
+                            <a href="">${contract[i]['contract_id']}</a>
+                        </div>
+                        <div class="sat" style="text-align:center;">
+                            <p>Scope of Work</p>
+                            <a href="">Manpower</a>
+                        </div>
+                        <div class="sat" style="text-align:center;">
+                            <p>Total Price</p>
+                            <a href="">Manpower</a>
+                        </div>
+                        <div class="sat" style="text-align:center;">
+                            <p>Purchase Order Date</p>
+                            <a href="">Manpower</a>
+                        </div>
+
+                        <div class="sat" style="text-align:center;">
+                            <button class="btn btn-warning my-2 my-sm-0" type="submit" style="height: 48px; font-size: 14px;">
+                            <a href="View_CPO_reviewer.html?contract_id=${contract[i].contract_id}">
+                                VIEW PO
+                            </a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                `
+            $('#contractList').append(card)
+        }
+
+    },
+    error: function () {
+
+    },
+    complete: function () {
+
+    }
+
+}) 
+// ============================================
+
 
 //Contract Purchase Order ========================================
 var url_string = window.location.href
@@ -168,6 +219,7 @@ $.ajax({
         $('#totalPrice').val(totalprice)
         var po_id = profil.po_id
         console.log(po_id)
+        commentList(po_id)
     },
     error: function (error) {
         //error handling
@@ -181,10 +233,9 @@ $.ajax({
 
 
 // ADD COMMENT ==============================================
-function addComment(po_id) {
+function addComment() {
     // var quiz_id = document.getElementById("quiz").value;
-    var po_id = po_id
-    console.log(po_id)
+    var comment_id = 1
     var comment_detail = $('#comment_detail').val()
 
     console.log(po_id);
@@ -195,11 +246,25 @@ function addComment(po_id) {
         method: "POST",
         contentType: "application/json",
         data: JSON.stringify({
-            po_id: po_id,
+            comment_id: comment_id,
             comment_detail: comment_detail,
         }),
-        success: function () {
-            
+        success: function (comment) {
+            comments =
+            `
+                <div class="row" style="margin-bottom:20px;" >
+                <div class="col-2" style="text-align: center;">
+                    <img src="img/pp.png" alt="" style="border-radius:50%; width: 100px;">
+                    <div class="prof" id="profileInfo">
+                    </div>
+                </div>
+                <div class="col-sm d-flex align-items-end flex-column">
+                    <textarea style="margin-bottom: 5px; height:100px;" class="form-control"
+                        value="${comment.comment_detail}"></textarea>
+                </div>
+                </div>
+            `
+            $('#comment_list').append(comments)
         },
         error: function () {
             alert("cek semua inputanya");
@@ -209,7 +274,44 @@ function addComment(po_id) {
         }
     });
 } 
-
 // ADD COMMENT ==============================================
+// GET COMMENT BY COMMENT ID ==============================================
+// GET PROFILE
+function commentList(po_id){
+    console.log(po_id)
+    $.ajax({
+        url: `http://127.0.0.1:5000/getCommentByCommentId/${po_id}`,
+        method: "GET",
+        success: function (comment) {
+            for (var i = 0; i < comment.length; i++) {
+                var list_comment =
+                    `
+                     <div class="row" style="margin-bottom:20px;" >
+                    <div class="col-2" style="text-align: center;">
+                        <img src="img/pp.png" alt="" style="border-radius:50%; width: 100px;">
+                        <div class="prof" id="profileInfo">
+                        </div>
+                    </div>
+                    <div class="col-sm d-flex align-items-end flex-column">
+                        <textarea style="margin-bottom: 5px; height:100px;" class="form-control"
+                            value="">${comment[i]['comment_detail']}</textarea>
+                    </div>
+                    </div>   
+                    `
+                $('#comment_list').append(list_comment)
+            }
+    
+        },
+        error: function () {
+    
+        },
+        complete: function () {
+    
+        }
+    
+    }) 
+}
+// // ADD COMMENT BY COMMENT ID ==============================================
+
 
 

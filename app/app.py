@@ -322,6 +322,7 @@ def addPurchaseOrderSubmit(contract_id):
     tokenNFRequester = pegawaiRequester.token
 
     recordNF = createRecordNF(tokenNFRequester)
+    print(recordNF)
     recordIdNF = recordNF['data']['id']
 
     body["record_id"] = recordIdNF
@@ -329,10 +330,8 @@ def addPurchaseOrderSubmit(contract_id):
     submittedRecord = submitRecordNF(recordIdNF, body, tokenNFRequester)
     print("LOL",submittedRecord)
     processIdNF = submittedRecord['data']['process_id']
-
     body["process_id"] = processIdNF
-
-
+    print(body)
     try:       
         PurchaseOrder.query.filter_by(po_id=body["po_id"]).update(dict(process_id=body["process_id"],record_id=body["record_id"]))
         db.session.commit()
@@ -504,3 +503,12 @@ def delete_comment(_Id):
         except Exception as e:
                 return (str(e))
 # DELETE COMMENT =============
+# GET COMMENT BY COMMENT ID =============
+@app.route('/getCommentByCommentId/<commentId_>', methods=["GET"])
+def get_comment_by_comment_id(commentId_):
+        try:
+                comment = Comment.query.filter_by(comment_id=commentId_).all()
+                return jsonify([com.serialize()for com in comment])
+        except Exception as e:
+                return (str(e))
+# GET ALL COMMENT =============
